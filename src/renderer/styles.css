@@ -1,0 +1,331 @@
+/* styles.css */
+
+/* Custom CSS Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    color: #007bff;
+    /* Change the text color to a blue shade */
+    text-align: center;
+    /* Center-align the text */
+    margin-top: 20px;
+    /* Add some top margin for spacing */
+}
+
+input[type="text"] {
+    max-width: 200px;
+    /* Set the maximum width to 200 pixels, adjust as needed */
+}
+
+.form-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+    /* Adjust spacing between rows */
+}
+
+label,
+input,
+p {
+    display: inline-block;
+    margin-right: 10px;
+    /* Adjust spacing between elements */
+}
+
+.input-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+    /* Adjust spacing between rows */
+}
+
+#directoryForm {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    font-weight: bold;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    display: block;
+    /* Adjust spacing between label and input */
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+input[type="text"]:hover,
+select:hover {
+    border-color: #007bff;
+}
+
+input[type="text"]:focus,
+select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+button {
+    transition: background-color 0.3s, transform 0.3s;
+    /* Smooth color change and pop effect */
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+button:active {
+    transform: scale(0.97);
+    /* Subtle "press" effect when the button is clicked */
+}
+
+.error {
+    background-color: #ffebee;
+    /* light red background */
+    padding: 5px;
+    border-radius: 3px;
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+    /* Vertically center the items */
+}
+
+/* Container for log messages */
+#logContainer {
+    max-height: 200px;
+    /* Adjust the maximum height as needed */
+    border: 1px solid #ccc;
+    /* Add a border for visual separation */
+    padding: 10px;
+    /* Add some padding for spacing */
+}
+
+/* Style the log container to resemble a terminal console */
+#logMessages {
+    background-color: black;
+    margin-top: 20px;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    max-height: 200px;
+    /* Add a maximum height and scroll if needed */
+    overflow-y: auto;
+}
+
+.log-message {
+    margin: 0;
+    padding: 0;
+}
+
+.log-message.accepted {
+    color: green;
+}
+
+.log-message.rejected {
+    color: red;
+}
+
+.folder,
+.file {
+    margin-left: 20px;
+}
+
+.folder>span {
+    cursor: pointer;
+}
+
+.collapsed>ul {
+    display: none;
+}
+
+
+/* ###################################################### CSS for filesystem elements ###################################################### */
+.loading-container {
+    display: none;
+    align-items: center;
+    /* vertically align items in the center */
+    justify-content: center;
+    /* horizontally align items in the center */
+    gap: 10px;
+    /* gap between text and loader */
+}
+
+.lds-roller {
+    display: inline-block;
+    position: relative;
+    width: 5vw; /* 10% of viewport width, original value: 80px*/
+    height: 5vw; /* keep it square, so using the same vw as width, original value: 80px*/
+}
+
+.lds-roller div {
+    animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    transform-origin: 2.5vw 2.5vw; /* half of the lds-roller's width and height */
+}
+
+.lds-roller div:after {
+    content: " ";
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    background: #000000;
+    width: 0.4375vw; /* 7px of 80px is 8.75%, applying that to 10vw i.e. 5*.0875 */
+    height: 0.4375vw; /* half of the width and height */
+    max-width: 40px;
+    max-height: 40px;
+    margin: -0.4375vw 0 0 -0.4375vw; /* half of the width and height */
+}
+
+/* Conversion factor: Since .lds-roller is 10vw (which is equivalent to 80px from the original design), 
+   each pixel is equivalent to (10vw / 80) = 0.125vw 
+*/
+
+:root {
+    --factor: 0.0625vw;
+}
+
+.lds-roller div:nth-child(1):after {
+    top: calc(63 * var(--factor));  
+    left: calc(63 * var(--factor));
+}
+
+.lds-roller div:nth-child(2):after {
+    top: calc(68 * var(--factor));  
+    left: calc(56 * var(--factor));
+}
+
+.lds-roller div:nth-child(3):after {
+    top: calc(71 * var(--factor));  
+    left: calc(48 * var(--factor));
+}
+
+.lds-roller div:nth-child(4):after {
+    top: calc(72 * var(--factor));  
+    left: calc(40 * var(--factor));
+}
+
+.lds-roller div:nth-child(5):after {
+    top: calc(71 * var(--factor));  
+    left: calc(32 * var(--factor));
+}
+
+.lds-roller div:nth-child(6):after {
+    top: calc(68 * var(--factor));  
+    left: calc(24 * var(--factor));
+}
+
+.lds-roller div:nth-child(7):after {
+    top: calc(63 * var(--factor));  
+    left: calc(17 * var(--factor));
+}
+
+.lds-roller div:nth-child(8):after {
+    top: calc(56 * var(--factor));  
+    left: calc(12 * var(--factor));
+}
+
+/* Animation delays remain the same as they're based on time and not on size. */
+
+.lds-roller div:nth-child(1) {
+    animation-delay: -0.036s;
+}
+
+.lds-roller div:nth-child(2) {
+    animation-delay: -0.072s;
+}
+
+.lds-roller div:nth-child(3) {
+    animation-delay: -0.108s;
+}
+
+.lds-roller div:nth-child(4) {
+    animation-delay: -0.144s;
+}
+
+.lds-roller div:nth-child(5) {
+    animation-delay: -0.18s;
+}
+
+.lds-roller div:nth-child(6) {
+    animation-delay: -0.216s;
+}
+
+.lds-roller div:nth-child(7) {
+    animation-delay: -0.252s;
+}
+
+.lds-roller div:nth-child(8) {
+    animation-delay: -0.288s;
+}
+
+@keyframes lds-roller {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+#filesystem-dropdown {
+    border: 1px solid #ccc;
+    padding: 10px;
+    max-height: 200px;  /* Or any other suitable value */
+    overflow-y: auto;
+}
+
+#filesystem-dropdown:hover {
+    border-color: #999;
+}
+
+#selected-items {
+    margin-top: 20px;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+}
+
+#selected-items div {
+    margin-bottom: 5px;
+}
+
+div > input[type="checkbox"], div > label {
+    display: inline-block; 
+    vertical-align: middle;  /* To vertically align the checkbox and label in the middle */
+    margin: 0;
+}
+
+div > label {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal; /* Resets the line-height */
+    margin-left: 5px; /* Optional, to add some space between checkbox and label */
+}
+
+/* ######################################################################## */

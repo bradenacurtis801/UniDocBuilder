@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Directory Picker</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <!-- Include Font Awesome CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div>
+      <h1>Electron Directory Picker</h1>
+      <form id="directoryForm">
+        <div class="form-row">
+          <label for="sourceDirectory">Source Directory:</label>
+          <input type="text" id="sourceDirectory" readonly/>
+          <p class="error openSourceDialog-error"></p>
+        </div>
+        <button id="openSourceDialog" type="button">
+          Pick a source directory</button
+        ><br /><br />
+
+        <div class="form-row">
+          <label for="outputExtension">Output Extension:</label>
+          <select id="outputExtension">
+            <option value=".txt">.txt</option>
+            <option value=".cs">.cs</option>
+            <option value=".py">.py</option>
+            <option value=".cpp">.cpp</option>
+            <option value=".js">.js</option>
+            <!-- Add more options as needed -->
+          </select>
+        </div>
+
+        <label for="fullPath">Full Path:</label>
+        <input type="checkbox" id="fullPath" checked /><br /><br />
+
+        <label>Ignore Files (Select files you want to exclude)</label>
+        <div id="filesystem-dropdown"></div>
+        <div id="selected-items"></div>
+
+        
+        <div class="loading-container" id="loadingContainer">
+          <span>Loading files from source directory</span>
+          <div class="lds-roller">
+              <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+          </div>
+      </div>
+
+        <button id="submit" type="submit">Submit</button><br /><br />
+        <p id="submissionMessage"></p>
+        <p class="error openSourceDialog-error" id="submitErr"></p>
+      </form>
+      <div id="logContainer">
+        <div id="logMessages"></div>
+      </div>
+    </div>
+    <!-- <script src="../main.js"></script> -->
+    <!-- <script src="./ui.js"></script> -->
+    <script src="./formValidation.js"></script>
+    <script src="genFileSystem.js"></script>
+  </body>
+</html>

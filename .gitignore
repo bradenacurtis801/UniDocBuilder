@@ -1,0 +1,14 @@
+# .gitignore
+
+# Node modules
+node_modules/
+
+# Build artifacts
+dist/
+MyApp-win32-x64/
+
+# Editor configurations
+.vscode/
+
+# Lock files (Optional, some developers commit this file)
+# package-lock.json
