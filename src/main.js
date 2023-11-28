@@ -1,7 +1,14 @@
 const { app, BrowserWindow, ipcMain, dialog } = require("electron");
+const { autoUpdater } = require('electron-updater');
+const log = require('electron-log');
 const traverseAndAppendFiles = require("./traverseAndAppendFiles.js");
 const path = require("path");
 const fs = require("fs").promises;
+
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+log.info('App starting...');
+
 
 let mainWindow;
 
@@ -16,7 +23,24 @@ app.on("ready", () => {
   });
 
   mainWindow.loadFile(path.join(__dirname, "./renderer/index.html"));
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
+
+  // Check for updates after the app has loaded.
+  autoUpdater.checkForUpdatesAndNotify();
+});
+
+// Event fired when an update is available for download
+autoUpdater.on('update-available', () => {
+  mainWindow.webContents.send('update_available');
+});
+
+// Event fired when an update has been downloaded and is ready to be installed
+autoUpdater.on('update-downloaded', () => {
+  mainWindow.webContents.send('update_downloaded');
+});
+
+ipcMain.on('restart_app', () => {
+  autoUpdater.quitAndInstall();
 });
 
 ipcMain.on("open-directory-dialog", async (event) => {

@@ -1,12 +1,12 @@
 {
     "name": "uni-doc-builder",
-    "version": "1.0.0",
+    "version": "1.0.3",
     "description": "An Electron application to pick directories.",
     "main": "src/main.js",
     "scripts": {
         "start": "electron ."
     },
-    "author": "Your Name",
+    "author": "Braden Curtis",
     "license": "MIT",
     "devDependencies": {
         "electron": "^16.0.0",
@@ -19,13 +19,18 @@
         "win": {
             "target": "nsis"
         },
-        "publish": [{
-            "provider": "github",
-            "owner": "bradenacurtis801",
-            "repo": "UniDocBuilder"
-          }]
+        "publish": [
+            {
+                "provider": "github",
+                "owner": "bradenacurtis801",
+                "repo": "UniDocBuilder"
+            }
+        ]
     },
     "dependencies": {
-        "electron-updater": "^6.1.4"
+        "dotenv": "^16.3.1",
+        "electron-log": "^5.0.0",
+        "electron-updater": "^6.1.4",
+        "office-text-extractor": "^3.0.2"
     }
 }

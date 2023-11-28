@@ -1,6 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-const getCommentDelimiter = require('./getCommentDelimiter.js');
+const fs = require("fs");
+const path = require("path");
+const getCommentDelimiter = require("./getCommentDelimiter.js");
+const { extractTextFromPPTX, extractTextFromPPT } = require("./util/utils.js");
 
 // ANSI escape codes for colors
 const fsPromises = fs.promises;
@@ -22,17 +23,41 @@ async function traverseAndAppendFiles(
   fullPath,
   event
 ) {
-  
   const outputStream = fs.createWriteStream(outputPath, { flags: "w" });
 
   async function processFile(rootDirectory, filePath) {
     try {
-      const fileContent = await fsPromises.readFile(filePath, "utf8");
-      const relativePath = path.relative(rootDirectory, filePath);
-      const delimiter = getCommentDelimiter(relativePath);
+      const fileExtension = path.extname(filePath).toLowerCase();
 
-      outputStream.write(`\n\n${delimiter} === ${relativePath} ===\n\n`);
-      outputStream.write(fileContent);
+      if (fileExtension === ".pptx") {
+        // Extract text from .pptx and append it to the output
+        const text = await extractTextFromPPTX(filePath);
+        const relativePath = path.relative(rootDirectory, filePath);
+        const delimiter = getCommentDelimiter(relativePath);
+
+        outputStream.write(`\n\n${delimiter} === ${relativePath} ===\n\n`);
+        outputStream.write(text);
+      } else if (fileExtension === ".ppt") {
+        // Convert .ppt to .pptx and then extract text
+        const pptxFilePath = filePath + "x"; // Assuming the .pptx will have the same name with 'x' extension
+        await extractTextFromPPT(filePath, pptxFilePath);
+
+        // Extract text from the converted .pptx and append it to the output
+        const text = await extractTextFromPPTX(pptxFilePath);
+        const relativePath = path.relative(rootDirectory, filePath);
+        const delimiter = getCommentDelimiter(relativePath);
+
+        outputStream.write(`\n\n${delimiter} === ${relativePath} ===\n\n`);
+        outputStream.write(text);
+      } else {
+        // Handle other file types as before
+        const fileContent = await fsPromises.readFile(filePath, "utf8");
+        const relativePath = path.relative(rootDirectory, filePath);
+        const delimiter = getCommentDelimiter(relativePath);
+
+        outputStream.write(`\n\n${delimiter} === ${relativePath} ===\n\n`);
+        outputStream.write(fileContent);
+      }
     } catch (error) {
       if (error.code === "EBUSY") {
         console.error(`File is currently busy or locked: ${filePath}`);
@@ -50,21 +75,21 @@ async function traverseAndAppendFiles(
       const stats = await fsPromises.stat(filePath);
       const f = fullPath ? filePath : file;
 
-      const isIgnored = ignoreList.includes(file)
+      const isIgnored = ignoreList.includes(file);
 
       if (isIgnored) {
         console.log(`${RED}Rejected: ${f}${RESET}`);
-        event.reply('message-to-renderer', {
-            type: 'log',
-            message: `Rejected: ${f}`,
-            status: 'rejected'
+        event.reply("message-to-renderer", {
+          type: "log",
+          message: `Rejected: ${f}`,
+          status: "rejected",
         });
       } else {
         console.log(`${GREEN}Accepted: ${f}${RESET}`);
-        event.reply('message-to-renderer', {
-            type: 'log',
-            message: `Accepted: ${f}`,
-            status: 'accepted'
+        event.reply("message-to-renderer", {
+          type: "log",
+          message: `Accepted: ${f}`,
+          status: "accepted",
         });
       }
 
@@ -81,5 +106,4 @@ async function traverseAndAppendFiles(
   await traverseDirectory(rootPath);
   outputStream.end();
 }
-module.exports = traverseAndAppendFiles
-
+module.exports = traverseAndAppendFiles;
